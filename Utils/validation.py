@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 def validate_dataframe(dataframe: pd.DataFrame) -> dict:
     """
     Validate a dataframe and return a summary.

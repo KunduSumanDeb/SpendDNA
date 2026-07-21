@@ -1,10 +1,10 @@
 # SpendDNA - Project Memory
 
-## Project Overview
+# Project Overview
 
-SpendDNA is a professional financial analytics project that analyzes bank transaction data and generates meaningful financial insights through a structured data pipeline.
+SpendDNA is a professional financial analytics project that analyzes bank transaction data and generates meaningful financial insights through a structured notebook-based data pipeline.
 
-The project follows a notebook-based workflow where each notebook has a single responsibility and exports its output for the next stage.
+Each notebook has a single responsibility, consumes the output of the previous notebook, and exports a processed dataset for the next stage.
 
 ---
 
@@ -13,6 +13,7 @@ The project follows a notebook-based workflow where each notebook has a single r
 SpendDNA/
 │
 ├── Assets/
+│
 ├── Config/
 │   ├── __init__.py
 │   ├── paths.py
@@ -20,7 +21,8 @@ SpendDNA/
 │
 ├── Data/
 │   ├── raw_data.pkl
-│   └── (future exported pickle files)
+│   ├── cleaned_data.pkl
+│   └── (future pipeline outputs)
 │
 ├── Dataset/
 │   ├── raw/
@@ -32,6 +34,7 @@ SpendDNA/
 │
 ├── Notebooks/
 │   ├── 01_Dataset_Exploration.ipynb
+│   ├── 02_Data_Cleaning.ipynb
 │   └── ...
 │
 ├── Outputs/
@@ -43,6 +46,8 @@ SpendDNA/
 │   ├── __init__.py
 │   ├── io.py
 │   ├── validation.py
+│   ├── cleaning.py
+│   ├── analysis.py
 │   └── display.py
 │
 ├── README.md
@@ -56,18 +61,18 @@ SpendDNA/
 
 - Follow SpendDNA.pdf strictly.
 - One notebook = One responsibility.
-- Every notebook has:
-    - Objective
-    - Input
-    - Processing
-    - Validation
-    - Export
-    - Summary
-- Reusable logic belongs inside Utils.
-- Project paths belong inside Config.
+- Keep notebook cells lightweight.
+- Place reusable logic inside Utils.
+- Keep project paths inside Config.
 - Avoid duplicated code.
-- Maintain clean documentation.
-- Every notebook exports a pickle file for the next notebook.
+- Every notebook must include:
+  - Objective
+  - Input
+  - Processing
+  - Validation
+  - Export
+  - Summary
+- Every notebook exports one pickle file for the next notebook.
 
 ---
 
@@ -119,29 +124,33 @@ final_data.pkl
 
 ✅ Project structure created
 
-✅ Config module created
+✅ Config module
 
-✅ Utils module created
+✅ Utils module
 
 ✅ Shared path management
 
-✅ Shared IO utilities
+✅ IO utilities
 
-✅ Shared validation utilities
+✅ Validation utilities
 
-✅ Shared display utilities
+✅ Display utilities
 
-✅ Notebook 01 completed
+✅ Cleaning utilities
+
+✅ Notebook 01 – Dataset Exploration
+
+✅ Notebook 02 – Data Cleaning
 
 ---
 
 # Dataset Information
 
-Rows:
-1328
+Original Dataset
 
-Columns:
-8
+Rows: 1328
+
+Columns: 8
 
 Columns
 
@@ -154,11 +163,35 @@ Columns
 - Mode
 - Ref
 
-Validation
+---
 
-Missing Values : 0
+# Notebook 02 Summary
 
-Duplicate Rows : 18
+Input File
+
+- raw_data.pkl
+
+Output File
+
+- cleaned_data.pkl
+
+Processing Performed
+
+- Standardized date formats
+- Standardized transaction types
+- Cleaned amount values
+- Trimmed text columns
+- Removed duplicate rows
+
+Output Statistics
+
+Input Rows : 1328
+
+Output Rows : 1310
+
+Duplicates Removed : 18
+
+Columns : 8
 
 ---
 
@@ -166,13 +199,21 @@ Duplicate Rows : 18
 
 Current Completed Notebook
 
-Notebook 01
+Notebook 02 – Data Cleaning
 
 Next Notebook
 
-Notebook 02
-Data Cleaning
+Notebook 03 – Vendor Normalization
 
 Status
 
 Ready to Begin
+
+---
+
+# Notes
+
+- All intermediate datasets are stored as pickle files inside the Data directory.
+- Pickle files contain complete pandas DataFrames and are used as the project's pipeline format.
+- CSV exports are optional and intended only for manual inspection or debugging.
+- Every notebook must remain independent by loading only the previous notebook's output.
