@@ -1,168 +1,252 @@
-# SpendDNA Project Memory
+# SpendDNA - Project Memory
 
-## Project Status
-
-### Completed Functions
-
-- ✅ Function 1 – Data Cleaning & Standardization
-- ✅ Function 2 – Transaction Categorization
-- ✅ Function 3 – Vendor Normalization
-
-Current Progress: **3 / 8 Functions Completed**
+Last Updated: 22 July 2026
 
 ---
 
-# Project Architecture
+# Project Status
 
-## Folder Structure
+## Overall Progress
 
-SpendDNA/
-│
-├── Config/
-│   └── paths.py
-│
-├── Data/
-│   ├── Raw/
-│   ├── Processed/
-│   └── Outputs/
-│
-├── Utils/
-│   ├── cleaning.py
-│   ├── categorization.py
-│   ├── vendor.py
-│   └── ...
-│
-├── Notebooks/
-│   ├── 01_Data_Cleaning.ipynb
-│   ├── 02_Transaction_Categorization.ipynb
-│   ├── 03_Vendor_Normalization.ipynb
-│   └── ...
-│
-└── memory.md
+| Function | Status |
+|----------|--------|
+| Function 1 - Data Ingestion | ✅ Completed |
+| Function 2 - Data Cleaning | ✅ Completed |
+| Function 3 - Vendor Normalization | ✅ Completed |
+| Function 4 - Merchant Insights | ✅ Completed |
+| Function 5 | ⏳ Pending |
 
 ---
 
-# Notebook Development Rules
+# Current Architecture
 
-Every notebook follows the same structure:
-
-1. Markdown Title
-2. Code Cell 1 – Setup
-3. Code Cell 2 – Imports
-4. Code Cell 3 – Load Dataset
-5. Code Cell 4 – Processing
-6. Code Cell 5 – Validation
-7. Code Cell 6 – Export
-8. Markdown Summary
-
----
-
-# Utility Module Rules
-
-- Heavy logic remains inside `Utils/`.
-- Notebooks should only orchestrate function calls.
-- Every utility function must include a docstring.
-- Keep functions modular and reusable.
-- Avoid duplicate logic across utilities.
-
----
-
-# Configuration Rules
-
-Always use paths from:
-
-Config/paths.py
-
-Do not hardcode file paths.
+Raw Data
+↓
+Function 1
+↓
+raw_data.pkl
+↓
+Function 2
+↓
+cleaned_data.pkl
+↓
+Function 3
+↓
+vendor_data.pkl
+↓
+Function 4
+↓
+merchant_summary.pkl
+↓
+Function 5 ...
 
 ---
 
-# Function 3 Summary
+# Completed Outputs
 
-Notebook:
-03_Vendor_Normalization.ipynb
+## Function 1
 
-Utility:
-Utils/vendor.py
+Exports
 
-Input:
+- raw_data.pkl
+
+Purpose
+
+- Load raw transaction data
+- Perform initial validation
+- Preserve original dataset
+
+---
+
+## Function 2
+
+Exports
 
 - cleaned_data.pkl
 
-Output:
+Purpose
+
+- Remove invalid records
+- Standardize transaction fields
+- Produce cleaned dataset
+
+---
+
+## Function 3
+
+Exports
 
 - vendor_data.pkl
 
-Processing:
+Purpose
 
-- Vendor extraction
-- Prefix removal
-- Special character cleaning
-- UPI ID removal
-- Reference (REF/UTR/TXN) removal
-- Merchant normalization
-- Vendor dataset creation
+- Normalize merchant/vendor names
+- Prepare dataset for merchant analytics
 
-Normalization Features:
+Final Schema
 
-- Large KNOWN_BRANDS mapping
-- Longest-keyword matching
-- Alias normalization
-- Generic vendor cleaning
-- Unknown vendor fallback
+| Column |
+|---------|
+| Date |
+| Time |
+| Description |
+| Transaction Type |
+| Amount |
+| Balance |
+| Mode |
+| Ref |
+| Vendor |
+| Category |
 
-Validation Results
+Important Fixes
 
-Total Transactions : 1310
+### Transaction Type
 
-Unique Vendors : 64
+Original
 
-Top Vendors
+```
+Type
+```
 
-- SWIGGY
-- ZOMATO
-- OLA
-- AMAZON
-- ZEPTO
-- UBER
-- BLINKIT
-- RAPIDO
-- FLIPKART
-- STARBUCKS
+Renamed to
 
-Status:
+```
+Transaction Type
+```
 
-✅ Function 3 Completed
+### Date
+
+Converted to
+
+```python
+datetime64
+```
+
+using
+
+```python
+pd.to_datetime(...)
+```
+
+### Category
+
+Added
+
+```
+Category
+```
+
+Default value
+
+```
+Uncategorized
+```
 
 ---
 
-# Coding Standards
+## Function 4
 
-- One notebook = One function
-- Validate before exporting
-- Export only pickle files
-- Keep notebooks clean
-- No duplicated cells
-- Reusable utilities only
-- Follow modular architecture
-- Maintain consistent naming conventions
+Exports
+
+- merchant_summary.pkl
+
+Generated Outputs
+
+- merchant_summary
+- merchant_category
+- monthly_summary
+- top_spend
+- top_frequency
+- metadata
+
+Purpose
+
+Generate merchant-level spending analytics from normalized vendors.
+
+Status
+
+Validated successfully.
 
 ---
 
-# Next Function
+# Utility Reuse
 
-Function 4
+Current utilities reused
 
-Merchant Insights
+- Utils/io.py
+- Utils/vendor.py
+- Utils/merchant.py
 
-Planned Utility:
+Avoid rewriting utility functions unless absolutely necessary.
 
-Utils/merchant.py
+---
 
-Planned Notebook:
+# Important Decisions
 
-04_Merchant_Insights.ipynb
+✓ One notebook = One function
 
-Expected Output:
+✓ Every notebook exports one pickle
+
+✓ Preserve modular pipeline
+
+✓ Never duplicate business logic
+
+✓ Utilities remain the single source of truth
+
+✓ Notebook only orchestrates processing
+
+---
+
+# Known Improvements
+
+Transaction Type should be normalized to uppercase in Function 3.
+
+Recommended implementation
+
+```python
+vendor_data["Transaction Type"] = (
+    vendor_data["Transaction Type"]
+    .astype(str)
+    .str.upper()
+)
+```
+
+This maintains compatibility with utility filters.
+
+---
+
+# Current Pipeline
+
+Raw Data
+
+↓
+
+raw_data.pkl
+
+↓
+
+cleaned_data.pkl
+
+↓
+
+vendor_data.pkl
+
+↓
 
 merchant_summary.pkl
+
+↓
+
+Function 5
+
+---
+
+# Next Task
+
+Implement Function 5 while
+
+- following existing architecture
+- reusing utilities
+- exporting a single pickle
+- avoiding code duplication
+- preserving compatibility with Functions 1–4
