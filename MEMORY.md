@@ -1,219 +1,168 @@
-# SpendDNA - Project Memory
+# SpendDNA Project Memory
 
-# Project Overview
+## Project Status
 
-SpendDNA is a professional financial analytics project that analyzes bank transaction data and generates meaningful financial insights through a structured notebook-based data pipeline.
+### Completed Functions
 
-Each notebook has a single responsibility, consumes the output of the previous notebook, and exports a processed dataset for the next stage.
+- ✅ Function 1 – Data Cleaning & Standardization
+- ✅ Function 2 – Transaction Categorization
+- ✅ Function 3 – Vendor Normalization
+
+Current Progress: **3 / 8 Functions Completed**
 
 ---
 
-# Project Structure
+# Project Architecture
+
+## Folder Structure
 
 SpendDNA/
 │
-├── Assets/
-│
 ├── Config/
-│   ├── __init__.py
-│   ├── paths.py
-│   └── constants.py
+│   └── paths.py
 │
 ├── Data/
-│   ├── raw_data.pkl
-│   ├── cleaned_data.pkl
-│   └── (future pipeline outputs)
-│
-├── Dataset/
-│   ├── raw/
-│   ├── processed/
-│   └── exported/
-│
-├── Documents/
-│   └── SpendDNA.pdf
-│
-├── Notebooks/
-│   ├── 01_Dataset_Exploration.ipynb
-│   ├── 02_Data_Cleaning.ipynb
-│   └── ...
-│
-├── Outputs/
-│   ├── logs/
-│   ├── reports/
-│   └── screenshots/
+│   ├── Raw/
+│   ├── Processed/
+│   └── Outputs/
 │
 ├── Utils/
-│   ├── __init__.py
-│   ├── io.py
-│   ├── validation.py
 │   ├── cleaning.py
-│   ├── analysis.py
-│   └── display.py
+│   ├── categorization.py
+│   ├── vendor.py
+│   └── ...
 │
-├── README.md
-├── ROADMAP.md
-├── MEMORY.md
-└── requirements.txt
+├── Notebooks/
+│   ├── 01_Data_Cleaning.ipynb
+│   ├── 02_Transaction_Categorization.ipynb
+│   ├── 03_Vendor_Normalization.ipynb
+│   └── ...
+│
+└── memory.md
 
 ---
 
-# Development Rules
+# Notebook Development Rules
 
-- Follow SpendDNA.pdf strictly.
-- One notebook = One responsibility.
-- Keep notebook cells lightweight.
-- Place reusable logic inside Utils.
-- Keep project paths inside Config.
-- Avoid duplicated code.
-- Every notebook must include:
-  - Objective
-  - Input
-  - Processing
-  - Validation
-  - Export
-  - Summary
-- Every notebook exports one pickle file for the next notebook.
+Every notebook follows the same structure:
+
+1. Markdown Title
+2. Code Cell 1 – Setup
+3. Code Cell 2 – Imports
+4. Code Cell 3 – Load Dataset
+5. Code Cell 4 – Processing
+6. Code Cell 5 – Validation
+7. Code Cell 6 – Export
+8. Markdown Summary
 
 ---
 
-# Notebook Pipeline
+# Utility Module Rules
 
-01 Dataset Exploration
-        ↓
-raw_data.pkl
-
-02 Data Cleaning
-        ↓
-cleaned_data.pkl
-
-03 Vendor Normalization
-        ↓
-vendor_data.pkl
-
-04 Category Mapping
-        ↓
-category_data.pkl
-
-05 Spending Overview
-        ↓
-overview_data.pkl
-
-06 Monthly Trends
-        ↓
-monthly_data.pkl
-
-07 Time Analysis
-        ↓
-time_analysis.pkl
-
-08 Anomaly Detection
-        ↓
-anomaly_data.pkl
-
-09 Financial Archetypes
-        ↓
-archetype_data.pkl
-
-10 Final Report
-        ↓
-final_data.pkl
+- Heavy logic remains inside `Utils/`.
+- Notebooks should only orchestrate function calls.
+- Every utility function must include a docstring.
+- Keep functions modular and reusable.
+- Avoid duplicate logic across utilities.
 
 ---
 
-# Completed
+# Configuration Rules
 
-✅ Project structure created
+Always use paths from:
 
-✅ Config module
+Config/paths.py
 
-✅ Utils module
-
-✅ Shared path management
-
-✅ IO utilities
-
-✅ Validation utilities
-
-✅ Display utilities
-
-✅ Cleaning utilities
-
-✅ Notebook 01 – Dataset Exploration
-
-✅ Notebook 02 – Data Cleaning
+Do not hardcode file paths.
 
 ---
 
-# Dataset Information
+# Function 3 Summary
 
-Original Dataset
+Notebook:
+03_Vendor_Normalization.ipynb
 
-Rows: 1328
+Utility:
+Utils/vendor.py
 
-Columns: 8
-
-Columns
-
-- Date
-- Time
-- Description
-- Type
-- Amount
-- Balance
-- Mode
-- Ref
-
----
-
-# Notebook 02 Summary
-
-Input File
-
-- raw_data.pkl
-
-Output File
+Input:
 
 - cleaned_data.pkl
 
-Processing Performed
+Output:
 
-- Standardized date formats
-- Standardized transaction types
-- Cleaned amount values
-- Trimmed text columns
-- Removed duplicate rows
+- vendor_data.pkl
 
-Output Statistics
+Processing:
 
-Input Rows : 1328
+- Vendor extraction
+- Prefix removal
+- Special character cleaning
+- UPI ID removal
+- Reference (REF/UTR/TXN) removal
+- Merchant normalization
+- Vendor dataset creation
 
-Output Rows : 1310
+Normalization Features:
 
-Duplicates Removed : 18
+- Large KNOWN_BRANDS mapping
+- Longest-keyword matching
+- Alias normalization
+- Generic vendor cleaning
+- Unknown vendor fallback
 
-Columns : 8
+Validation Results
+
+Total Transactions : 1310
+
+Unique Vendors : 64
+
+Top Vendors
+
+- SWIGGY
+- ZOMATO
+- OLA
+- AMAZON
+- ZEPTO
+- UBER
+- BLINKIT
+- RAPIDO
+- FLIPKART
+- STARBUCKS
+
+Status:
+
+✅ Function 3 Completed
 
 ---
 
-# Current Status
+# Coding Standards
 
-Current Completed Notebook
-
-Notebook 02 – Data Cleaning
-
-Next Notebook
-
-Notebook 03 – Vendor Normalization
-
-Status
-
-Ready to Begin
+- One notebook = One function
+- Validate before exporting
+- Export only pickle files
+- Keep notebooks clean
+- No duplicated cells
+- Reusable utilities only
+- Follow modular architecture
+- Maintain consistent naming conventions
 
 ---
 
-# Notes
+# Next Function
 
-- All intermediate datasets are stored as pickle files inside the Data directory.
-- Pickle files contain complete pandas DataFrames and are used as the project's pipeline format.
-- CSV exports are optional and intended only for manual inspection or debugging.
-- Every notebook must remain independent by loading only the previous notebook's output.
+Function 4
+
+Merchant Insights
+
+Planned Utility:
+
+Utils/merchant.py
+
+Planned Notebook:
+
+04_Merchant_Insights.ipynb
+
+Expected Output:
+
+merchant_summary.pkl
