@@ -18,7 +18,8 @@ Last Updated: 03 August 2026
 | Function 6 - Time-of-Day Analysis | ✅ Completed |
 | Function 7 - Anomaly Detection | ✅ Completed |
 | Function 8 - Spending Archetype Detection | ✅ Completed |
-| Function 9 - Final SpendDNA Report | ⏳ Next |
+| Function 9 - Final SpendDNA Report | ✅ Completed |
+| Final Submission | ⏳ Next |
 
 ---
 
@@ -60,11 +61,11 @@ spending_archetypes.pkl
 
 ↓
 
-Function 9
+final_report.pkl
 
 ↓
 
-Final SpendDNA Report
+Final Submission
 
 ---
 
@@ -233,9 +234,9 @@ Implemented Metrics
 - E-commerce %
 - Investment %
 - Transport %
-- Late-night food %
-- Subscription vendor count
-- Savings rate
+- Late-night Food %
+- Subscription Vendor Count
+- Savings Rate
 
 Utility
 
@@ -244,6 +245,41 @@ Utility
 Status
 
 ✅ Completed
+
+---
+
+## Function 9
+
+Export
+
+- final_report.pkl
+
+Contains
+
+- executive_summary
+- top_spending_vendors
+- top_frequency_vendors
+- monthly_summary
+- time_summary
+- anomaly_summary
+- archetype_summary
+- metadata
+
+Utility
+
+- Utils/report.py
+
+Notebook
+
+- 09_Final_Report.ipynb
+
+Status
+
+✅ Completed
+
+Purpose
+
+Generate a consolidated SpendDNA report by combining outputs from Functions 4–8.
 
 ---
 
@@ -259,6 +295,7 @@ Current utilities
 - time_of_day.py
 - anomaly_detection.py
 - archetype.py
+- report.py
 
 Business logic exists only inside Utils.
 
@@ -268,13 +305,17 @@ Notebooks remain orchestration only.
 
 # analysis.py
 
+Current Status
+
 Still intentionally empty.
 
 Reserved for
 
-- Final project pipeline
-- Future automation
 - End-to-end execution
+- Pipeline automation
+- Future CLI integration
+
+No implementation unless future requirements demand it.
 
 ---
 
@@ -286,26 +327,26 @@ Reserved for
 
 ✓ One export = One pickle
 
-✓ Utilities contain business logic
+✓ Utilities contain all business logic
 
-✓ Notebook only orchestrates execution
+✓ Notebooks orchestrate execution only
 
 ✓ Preserve backward compatibility
 
-✓ Export transactions whenever required
-
 ✓ Metadata included in every export
+
+✓ Downstream notebooks consume exported pickle files only
 
 ---
 
 # Export Rules
 
-Each function exports exactly one pickle.
+Each completed function exports one pickle.
 
 Each pickle contains
 
-- transactions (when needed)
-- outputs
+- transactions (when required)
+- analysis outputs
 - metadata
 
 Never remove keys already consumed by downstream notebooks.
@@ -314,74 +355,17 @@ Never remove keys already consumed by downstream notebooks.
 
 # Coding Standards
 
-- PEP-8
-- Short cells
+- Follow PEP-8
+- Modular utility functions
 - Function docstrings
+- Short notebook cells
 - Validation before export
-- Print summary
-- Native Python types preferred over NumPy scalars
+- Final summary after each function
+- Prefer Python native numeric types over NumPy scalars
 
 ---
 
-# Known Improvements
-
-Future
-
-Vendor categorization can later be expanded without changing architecture.
-
-Current project already supports downstream compatibility.
-
----
-
-# Remaining Functions
-
-## Function 9
-
-Purpose
-
-Generate the final SpendDNA console report.
-
-Inputs
-
-- merchant_summary.pkl
-- monthly_trends.pkl
-- time_of_day_patterns.pkl
-- anomaly_detection.pkl
-- spending_archetypes.pkl
-
-Expected Sections
-
-1 Executive Summary
-
-2 Top Categories
-
-3 Top Vendors
-
-4 Time-of-Day Patterns
-
-5 Monthly Trend
-
-6 Top Anomalies
-
-7 Spending Archetypes
-
-8 Key Insights
-
-Export
-
-- final_report.pkl
-
-Utility
-
-- report.py
-
-Notebook
-
-09_Final_Report.ipynb
-
----
-
-# Project Folder
+# Current Project Folder
 
 SpendDNA/
 
@@ -389,77 +373,72 @@ SpendDNA/
 
 ├── Data/
 
+│   ├── raw_data.pkl
+│   ├── cleaned_data.pkl
+│   ├── vendor_data.pkl
+│   ├── merchant_summary.pkl
+│   ├── monthly_trends.pkl
+│   ├── time_of_day_patterns.pkl
+│   ├── anomaly_detection.pkl
+│   ├── spending_archetypes.pkl
+│   └── final_report.pkl
+
+│
+
 ├── Utils/
 
-│ ├── io.py
-
-│ ├── cleaning.py
-
-│ ├── vendor.py
-
-│ ├── merchant.py
-
-│ ├── monthly_trends.py
-
-│ ├── time_of_day.py
-
-│ ├── anomaly_detection.py
-
-│ ├── archetype.py
-
-│ └── report.py (next)
+│   ├── io.py
+│   ├── cleaning.py
+│   ├── vendor.py
+│   ├── merchant.py
+│   ├── monthly_trends.py
+│   ├── time_of_day.py
+│   ├── anomaly_detection.py
+│   ├── archetype.py
+│   └── report.py
 
 │
 
 ├── Notebooks/
 
-│ ├── 01_Data_Ingestion.ipynb
-
-│ ├── 02_Data_Cleaning.ipynb
-
-│ ├── 03_Vendor_Normalization.ipynb
-
-│ ├── 04_Merchant_Insights.ipynb
-
-│ ├── 05_Monthly_Trend_Analysis.ipynb
-
-│ ├── 06_Time_of_Day_Analysis.ipynb
-
-│ ├── 07_Anomaly_Detection.ipynb
-
-│ ├── 08_Spending_Archetypes.ipynb
-
-│ └── 09_Final_Report.ipynb
+│   ├── 01_Data_Ingestion.ipynb
+│   ├── 02_Data_Cleaning.ipynb
+│   ├── 03_Vendor_Normalization.ipynb
+│   ├── 04_Merchant_Insights.ipynb
+│   ├── 05_Monthly_Trend_Analysis.ipynb
+│   ├── 06_Time_of_Day_Analysis.ipynb
+│   ├── 07_Anomaly_Detection.ipynb
+│   ├── 08_Spending_Archetypes.ipynb
+│   └── 09_Final_Report.ipynb
 
 ---
 
-# Next Task
+# Remaining Work (Final Submission)
 
-Begin Function 9.
+The analytical pipeline is complete.
 
-The objective is to generate the formatted SpendDNA report exactly in the style shown in Section 11 of the project PDF.
+Remaining deliverables are project submission components:
 
-The report should include:
+- Three data-specific insights
+- Reflection section
+- AI assistance disclosure
+- README.md
+- Screenshot-ready formatted report
+- GitHub repository cleanup
+- Final documentation
 
-- Executive Summary
-- Top Categories
-- Top Vendors
-- Time-of-Day Patterns
-- Monthly Trend
-- Top Anomalies
-- Spending Archetypes
-- Key Insights
+No further analytical utilities are required unless optional bonus features are implemented.
 
-One utility
+---
 
-Utils/report.py
+# Known Future Improvements (Optional)
 
-One notebook
+- Vendor-to-category mapping refinement
+- Weekend vs Weekday analysis
+- Rolling 3-month spend forecasting
+- Invented archetype
+- Vendor cleanup audit
+- Streamlit dashboard
+- analysis.py as end-to-end pipeline runner
 
-09_Final_Report.ipynb
-
-One export
-
-final_report.pkl
-
-No previous notebook should require modification.
+These are optional enhancements and do not affect the completed modular architecture.
