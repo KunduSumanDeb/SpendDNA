@@ -14,7 +14,8 @@ Last Updated: 22 July 2026
 | Function 2 - Data Cleaning | ✅ Completed |
 | Function 3 - Vendor Normalization | ✅ Completed |
 | Function 4 - Merchant Insights | ✅ Completed |
-| Function 5 | ⏳ Pending |
+| Function 5 - Monthly Trend Analysis | ✅ Completed |
+| Function 6 | ⏳ Pending |
 
 ---
 
@@ -38,7 +39,11 @@ Function 4
 ↓
 merchant_summary.pkl
 ↓
-Function 5 ...
+Function 5
+↓
+monthly_trends.pkl
+↓
+Function 6 ...
 
 ---
 
@@ -169,6 +174,37 @@ Validated successfully.
 
 ---
 
+## Function 5
+
+Exports
+
+- monthly_trends.pkl
+
+Generated Outputs
+
+- monthly_pivot
+- monthly_totals
+- monthly_changes
+- growth_summary
+- decline_summary
+- metadata
+
+Purpose
+
+Generate category-wise monthly spending trends and identify month-on-month growth and decline.
+
+Status
+
+Validated successfully.
+
+Notes
+
+- Uses debit transactions for spending analysis.
+- Produces monthly pivot tables for downstream reporting.
+- Current output contains one category (`Uncategorized`) because category mapping is not yet finalized. The implementation automatically supports multiple categories when available.
+
+---
+
 # Utility Reuse
 
 Current utilities reused
@@ -176,6 +212,7 @@ Current utilities reused
 - Utils/io.py
 - Utils/vendor.py
 - Utils/merchant.py
+- Utils/monthly_trends.py
 
 Avoid rewriting utility functions unless absolutely necessary.
 
@@ -237,16 +274,20 @@ merchant_summary.pkl
 
 ↓
 
-Function 5
+monthly_trends.pkl
+
+↓
+
+Function 6
 
 ---
 
 # Next Task
 
-Implement Function 5 while
+Implement Function 6 while
 
 - following existing architecture
 - reusing utilities
 - exporting a single pickle
 - avoiding code duplication
-- preserving compatibility with Functions 1–4
+- preserving compatibility with Functions 1–5
