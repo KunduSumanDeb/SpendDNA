@@ -16,39 +16,73 @@ Last Updated: 03 August 2026
 | Function 4 - Merchant Insights | ✅ Completed |
 | Function 5 - Monthly Trend Analysis | ✅ Completed |
 | Function 6 - Time-of-Day Analysis | ✅ Completed |
-| Function 7 | ⏳ Pending |
+| Function 7 - Anomaly Detection | ✅ Completed |
 
 ---
 
 # Current Architecture
 
 Raw Data
+
 ↓
+
 Function 1
+
 ↓
+
 raw_data.pkl
+
 ↓
+
 Function 2
+
 ↓
+
 cleaned_data.pkl
+
 ↓
+
 Function 3
+
 ↓
+
 vendor_data.pkl
+
 ↓
+
 Function 4
+
 ↓
+
 merchant_summary.pkl
+
 ↓
+
 Function 5
+
 ↓
+
 monthly_trends.pkl
+
 ↓
+
 Function 6
+
 ↓
+
 time_of_day_patterns.pkl
+
 ↓
+
 Function 7
+
+↓
+
+anomaly_detection.pkl
+
+↓
+
+Function 8
 
 ---
 
@@ -126,7 +160,7 @@ Transaction Type
 
 ### Date
 
-Converted to
+Converted using
 
 ```python
 pd.to_datetime(...)
@@ -165,7 +199,7 @@ Generated Outputs
 
 Purpose
 
-Generate merchant-level spending analytics from normalized vendors.
+Generate merchant-level spending analytics.
 
 Status
 
@@ -191,7 +225,7 @@ Generated Outputs
 
 Purpose
 
-Generate category-wise monthly spending trends and identify month-on-month growth and decline.
+Generate monthly spending trends.
 
 Status
 
@@ -199,10 +233,8 @@ Validated successfully.
 
 Notes
 
-- Uses debit transactions for spending analysis.
-- Produces monthly pivot tables for downstream reporting.
-- Exports the processed transaction dataset for downstream functions.
-- Current output contains one category (`Uncategorized`) because category mapping is not yet finalized.
+- Debit transactions used.
+- Transactions exported for downstream functions.
 
 ---
 
@@ -224,16 +256,48 @@ Generated Outputs
 
 Purpose
 
-Analyze spending behaviour across different hours of the day.
+Analyze spending behaviour across different hours.
 
 Features
 
 - Hour extraction
 - Hour-wise spending
 - Category-wise hourly spending
-- Peak spending hour
-- Peak hour by category
+- Peak hour detection
 - Late-night spending analysis
+
+Status
+
+Validated successfully.
+
+---
+
+## Function 7
+
+Exports
+
+- anomaly_detection.pkl
+
+Generated Outputs
+
+- transactions
+- category_statistics
+- transactions_with_zscore
+- anomalies
+- top_anomalies
+- metadata
+
+Purpose
+
+Detect anomalous spending transactions using Z-score analysis.
+
+Features
+
+- Category statistics
+- Z-score computation
+- Debit-only anomaly detection
+- Top anomaly extraction
+- Metadata generation
 
 Status
 
@@ -241,15 +305,16 @@ Validated successfully.
 
 Current Results
 
-- Transactions analysed: 1304
-- Hours analysed: 24
-- Peak spending hour identified successfully.
-- Late-night spending summary generated successfully.
+- Transactions analysed: 1310
+- Categories: 1
+- Total anomalies: 50
+- Threshold: 2.0
 
 Notes
 
-- Category count is currently 1 because all transactions belong to the default category (`Uncategorized`).
-- Utility returns NumPy numeric types. These can later be converted to Python native types for cleaner summaries if required.
+- Only debit transactions are considered for anomaly detection.
+- Credit transactions are excluded from anomaly detection.
+- Current category count remains 1 because vendor categorization is not yet implemented.
 
 ---
 
@@ -262,8 +327,9 @@ Current utilities
 - Utils/merchant.py
 - Utils/monthly_trends.py
 - Utils/time_of_day.py
+- Utils/anomaly_detection.py
 
-Utilities are the only location containing business logic.
+Utilities remain the only location containing business logic.
 
 Notebooks only orchestrate execution.
 
@@ -274,19 +340,18 @@ Notebooks only orchestrate execution.
 Current Status
 
 - File exists.
-- No implementation yet.
-- Has not been required by Functions 1–6.
+- Still intentionally empty.
+- No requirement through Functions 1–7.
 
 Decision
 
-Leave empty until the complete pipeline is implemented.
+Keep empty until the final pipeline is assembled.
 
 Possible future role
 
-- Pipeline runner
-- End-to-end analysis orchestrator
-
-No implementation unless required by the project specification.
+- End-to-end pipeline runner
+- Complete SpendDNA report generator
+- Single entry-point analysis module
 
 ---
 
@@ -294,19 +359,19 @@ No implementation unless required by the project specification.
 
 ✓ One notebook = One function
 
-✓ Every notebook exports one pickle
+✓ One utility = One responsibility
 
-✓ Preserve modular architecture
+✓ One export = One pickle
 
-✓ Never duplicate business logic
+✓ Utilities contain business logic
 
-✓ Utilities remain the single source of truth
+✓ Notebooks orchestrate execution
 
-✓ Notebook only orchestrates processing
+✓ Every downstream notebook loads one pickle
 
-✓ Every downstream notebook loads exactly one pickle
+✓ Preserve backward compatibility
 
-✓ Transaction dataset is preserved for downstream compatibility
+✓ Export transactions whenever required downstream
 
 ---
 
@@ -314,7 +379,7 @@ No implementation unless required by the project specification.
 
 ## Category Mapping
 
-Current category value
+Current value
 
 ```
 Uncategorized
@@ -322,7 +387,16 @@ Uncategorized
 
 Future improvement
 
-Implement automatic merchant-to-category mapping.
+Implement automatic vendor-to-category mapping.
+
+This will improve
+
+- Merchant Insights
+- Monthly Trends
+- Time-of-Day Analysis
+- Anomaly Detection
+
+without changing project architecture.
 
 ---
 
@@ -330,7 +404,7 @@ Implement automatic merchant-to-category mapping.
 
 Normalize to uppercase.
 
-Recommended implementation
+Recommended
 
 ```python
 vendor_data["Transaction Type"] = (
@@ -344,7 +418,7 @@ vendor_data["Transaction Type"] = (
 
 ## NumPy Scalar Types
 
-Convert exported NumPy numeric values to Python native types where appropriate.
+Convert exported NumPy values into native Python types where appropriate.
 
 Example
 
@@ -385,34 +459,25 @@ time_of_day_patterns.pkl
 
 ↓
 
-Function 7
+anomaly_detection.pkl
+
+↓
+
+Function 8
 
 ---
 
 # Next Task
 
-Before implementing Function 7
+Before implementing Function 8
 
-- Review Function 7 requirements from SpendDNA.pdf.
-- Verify required inputs and outputs.
-- Confirm whether Function 6 exports everything needed.
-- Review remaining pipeline (Functions 7–10).
-- Decide final role of analysis.py.
-- Reuse existing utilities whenever possible.
-- Avoid modifying completed functions unless necessary.
-
-
-# Next Task
-
-Before implementing Function 7
-
-- Review Function 7 requirements from SpendDNA.pdf.
-- Verify required inputs and outputs.
-- Confirm whether Function 6 exports everything needed.
-- Review remaining pipeline (Functions 7–10).
-- Decide final role of analysis.py.
-- Reuse existing utilities whenever possible.
-- Avoid modifying completed functions unless necessary.
+- Review Function 8 requirements from SpendDNA.pdf.
+- Identify required inputs and outputs.
+- Verify whether Function 7 exports everything needed.
+- Design the new utility.
+- Reuse existing utilities wherever possible.
+- Preserve backward compatibility.
+- Export exactly one pickle.
 
 ---
 
@@ -434,22 +499,20 @@ Before implementing Function 7
 
 ## Utility Design
 
-- One utility file per function.
-- Business logic only inside Utils.
-- Notebooks should never contain processing logic.
-- Every utility function must include a docstring.
-- Reuse existing utilities whenever possible.
+- One utility per function
+- Business logic only inside Utils
+- Every function includes a docstring
+- Reuse existing utilities whenever possible
 
 ---
 
 ## Export Rules
 
-- Every function exports exactly one pickle.
-- Export transactions when required downstream.
-- Export function-specific outputs.
-- Export metadata.
-- Never remove existing keys from completed functions.
-- Only add new keys if required for downstream compatibility.
+- One function = One pickle
+- Export transactions when required downstream
+- Export metadata
+- Never remove existing exported keys
+- Only add keys required for future compatibility
 
 ---
 
@@ -458,41 +521,62 @@ Before implementing Function 7
 ### Notebooks
 
 01_Data_Ingestion.ipynb
+
 02_Data_Cleaning.ipynb
+
 03_Vendor_Normalization.ipynb
+
 04_Merchant_Insights.ipynb
+
 05_Monthly_Trend_Analysis.ipynb
+
 06_Time_of_Day_Analysis.ipynb
+
+07_Anomaly_Detection.ipynb
 
 ### Utilities
 
 io.py
+
 cleaning.py
+
 vendor.py
+
 merchant.py
+
 monthly_trends.py
+
 time_of_day.py
+
+anomaly_detection.py
 
 ### Export Files
 
 raw_data.pkl
+
 cleaned_data.pkl
+
 vendor_data.pkl
+
 merchant_summary.pkl
+
 monthly_trends.pkl
+
 time_of_day_patterns.pkl
+
+anomaly_detection.pkl
 
 ---
 
 ## Coding Standards
 
-- Follow PEP-8.
-- Keep notebooks clean and readable.
-- Use short comments describing each cell.
-- Avoid unnecessary blank lines.
-- Keep variable names meaningful.
-- Validate outputs before exporting.
-- Print a final summary after every function.
+- Follow PEP-8
+- Keep notebooks clean
+- Use short cell comments
+- Avoid unnecessary blank lines
+- Use meaningful variable names
+- Validate before exporting
+- Print a summary after every function
 
 ---
 
@@ -504,6 +588,6 @@ time_of_day_patterns.pkl
 - Utilities contain business logic
 - Notebooks orchestrate execution
 - Preserve backward compatibility
-- Never rewrite completed functions unless absolutely necessary
+- Never rewrite completed functions unless necessary
 - Review downstream dependencies before starting a new function
-- Keep pipeline modular and reusable
+- Keep the pipeline modular and reusable
